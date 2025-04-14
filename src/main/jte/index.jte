@@ -6,15 +6,12 @@
 <%-- Відображення даних (a) та іменовані параметри (f) --%>
 @param List<Category> categories
 @param List<Post> recentPosts
-@param String userName = null <%-- Значення за замовчуванням (g) --%>
+@param String userName = null
+@param DateTimeFormatter formatter
 
 <%-- Коментар: Це головна сторінка форуму ментальної підтримки (d) --%>
 
-<%-- Оголошення локальних змінних (j) --%>
-<%
-var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-var totalPosts = recentPosts.size();
-%>
+
 
 @template.layout(
 title = "Головна сторінка",
@@ -31,25 +28,31 @@ content = @`
 
     <div class="intro">
         <h2>Наші категорії</h2>
-        <p>На форумі наразі доступно ${categories.size()} категорій та ${totalPosts} публікацій.</p>
+        <p>На форумі наразі доступно ${categories.size()} категорій</p>
+        <p>Хочеш побачити всі категорії? <a href="/categories" class="link">Переглянути</a></p>
     </div>
 
     <div class="categories-wrapper">
         <div class="categories">
-            <%-- Цикли (c) --%>
             @for(Category category : categories)
-                <div class="category-card">
-                    <img src="/images/${category.getImageUrl()}" alt="${category.getName()}">
-                    <div class="category-content">
-                        <h3>${category.getName()}</h3>
-                        <p>${category.getDescription()}</p>
-                        <a href="/category/${category.getId()}" class="btn">Переглянути тему</a>
-                    </div>
-                    <div class="category-footer">
-                        <span class="category-meta">${category.getDiscussionCount()} обговорень</span>
-                        <span class="category-meta">${category.getUserCount()} учасників</span>
-                    </div>
-                </div>
+                @if(categories.indexOf(category) < 3)
+                    <div class="category-card">
+                            <div class="category-layout">
+                                <div class="category-image">
+                                    <img src="${category.getImageUrl()}" alt="${category.getName()}">
+                                </div>
+                                <div class="category-content">
+                                    <h3>${category.getName()}</h3>
+                                    <p>${category.getDescription()}</p>
+                                    <a href="/category/${category.getName()}" class="btn">Переглянути тему</a>
+                                </div>
+                            </div>
+                            <div class="category-footer">
+                                <span class="category-meta">${category.getDiscussionCount()} обговорень</span>
+                                <span class="category-meta">${category.getUserCount()} учасників</span>
+                            </div>
+                        </div>
+                @endif
             @endfor
         </div>
     </div>
@@ -57,33 +60,215 @@ content = @`
     <div class="recent-posts">
         <h2>Останні обговорення</h2>
 
-        @if(recentPosts.isEmpty()) <%-- Ще один приклад if statement (b) --%>
-            <p>Ще немає публікацій. Будьте першим, хто розпочне обговорення!</p>
+        @if(recentPosts.isEmpty())
+            <p class="no-posts">Ще немає публікацій. Будьте першим, хто розпочне обговорення!</p>
         @else
-        <%-- Цикли з умовою (b + c) --%>
-            @for(var i = 0; i < recentPosts.size(); i++)
-                @if(i < 5) <%-- Показуємо лише 5 останніх постів --%>
-                    <% Post post = recentPosts.get(i); %>
-                    <div class="post-item">
-                        <div class="post-header">
-                            <a href="/post/${post.getId()}" class="post-title">${post.getTitle()}</a>
-                            <span class="post-meta">${post.getCreatedAt().format(formatter)}</span>
-                        </div>
-                        <p class="post-excerpt">${post.getExcerpt()}</p>
-                        <div class="post-footer">
-                            <span class="post-meta">Автор: ${post.getAuthor().getUsername()}</span>
-                            <div class="tags">
-                                <%-- Вкладений цикл для тегів (c) --%>
-                                @for(String tag : post.getTags())
-                                    <span>${tag}</span>
-                                @endfor
+            <div class="post-list">
+                @for(Post post : recentPosts)
+                    @if(recentPosts.indexOf(post) < 5)
+                        <div class="post-card">
+                                <div class="post-header">
+                                    <a href="/post/${post.getId()}" class="post-title">${post.getTitle()}</a>
+                                    <span class="post-date">${post.getCreatedAt().format(formatter)}</span>
+                                </div>
+                                <p class="post-excerpt">${post.getContent()}</p>
+                                <div class="post-footer">
+                                    <div class="post-author">
+                                        <span>Автор: ${post.getAuthor().getUsername()}</span>
+                                    </div>
+                                    <div class="post-stats">
+                                        <span class="reply-count">0 відповідей</span>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="post-meta">${post.getReplyCount()} відповідей</span>
-                        </div>
-                    </div>
-                @endif
-            @endfor
+                    @endif
+                @endfor
+            </div>
         @endif
     </div>
+
 `
 )
+
+<style>
+    .category-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .category-layout {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .category-image {
+        width: 150px;
+        min-width: 150px;
+        padding: 15px;
+    }
+
+    .category-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    .category-content {
+        padding: 15px;
+        flex-grow: 1;
+    }
+
+    .category-content h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .category-footer {
+        background-color: #f5f5f5;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 10px;
+    }
+
+
+    .recent-posts {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+
+    .recent-posts h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+    .no-posts {
+        text-align: center;
+        padding: 30px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        color: #7f8c8d;
+        font-style: italic;
+    }
+
+    .post-list {
+        display: grid;
+        gap: 20px;
+    }
+
+    .post-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .post-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .post-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .post-title:hover {
+        color: #3498db;
+    }
+
+    .post-date {
+        font-size: 14px;
+        color: #7f8c8d;
+    }
+
+    .post-excerpt {
+        color: #34495e;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .post-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 12px;
+        border-top: 1px solid #ecf0f1;
+    }
+
+    .post-author {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+
+    .post-stats {
+        font-size: 14px;
+        color: #7f8c8d;
+    }
+
+    .reply-count {
+        background-color: #e8f4fc;
+        padding: 3px 8px;
+        border-radius: 30px;
+        color: #3498db;
+        font-weight: 500;
+    }
+
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .tag {
+        background-color: #f0f4f7;
+        color: #5d6d7e;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+    }
+
+    /* Додавання респонсивності */
+    @media (min-width: 768px) {
+        .post-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .post-list {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>

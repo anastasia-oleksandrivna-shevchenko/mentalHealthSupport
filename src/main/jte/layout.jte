@@ -1,6 +1,6 @@
 @param String title
-@param String description = "Форум ментальної підтримки";       // Default parameter (g)
-@param boolean showHero = true;             // Default parameter (g)
+@param String description = "Форум ментальної підтримки"
+@param boolean showHero = true
 @param gg.jte.Content content
 
 <!DOCTYPE html>
@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title} - Підтримка</title>
     <meta name="description" content="${description}">
-    <!-- CSS стилі опущені для стислості -->
     <style>
         /* Основні стилі */
         :root {
@@ -100,20 +99,22 @@
             text-decoration: none;
             border-radius: 4px;
         }
+
+
     </style>
 </head>
 <body>
 <header>
     <div class="container">
         <div class="header-content">
-            <div class="logo">Підтримка</div>
+            <div class="logo">MentalHealthSupport</div>
             <nav>
                 <ul>
                     <li><a href="/">Головна</a></li>
                     <li><a href="/categories">Категорії</a></li>
-                    <li><a href="/recent">Нові публікації</a></li>
+                    <li><a href="/diary">Особистий щоденник</a></li>
                     <li><a href="/about">Про нас</a></li>
-                    <li><a href="/contacts">Контакти</a></li>
+                    <li><a href="/profile">Мій профіль</a></li>
                     <li><a href="/login">Увійти</a></li>
                 </ul>
             </nav>
@@ -121,7 +122,7 @@
     </div>
 </header>
 
-@if(showHero) <%-- If Statement (b) --%>
+@if(showHero)
     <section class="hero">
         <div class="container">
             <h1>Форум ментальної підтримки</h1>
@@ -140,7 +141,7 @@
 <footer>
     <div class="container">
         <div class="footer-content">
-            <p>&copy; 2025 Форум "Підтримка" — Всі права захищені</p>
+            <p>&copy; 2025 Форум "MentalHealthSupport" — Всі права захищені</p>
             <p>Цей сайт не є заміною професійної медичної допомоги.</p>
         </div>
     </div>

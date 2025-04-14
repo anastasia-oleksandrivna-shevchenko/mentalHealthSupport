@@ -1,40 +1,40 @@
 @import com.shevchenko.mentalHealthSupport.models.Post
-@import com.shevchenko.mentalHealthSupport.models.Comment
+@import com.shevchenko.mentalHealthSupport.models.Category
 @import java.time.format.DateTimeFormatter
 @import java.util.List
 
-@param List<Comment> comments
-@param Long post
+@param List<Post> posts
+@param String category
 @param DateTimeFormatter formatter
 
 @template.layout(
-title = "${post}",
-description = "Усі комментарії поста",
+title = category,
+description = "Усі пости категорії",
 showHero = false,
 content = @`
     <div class="category-posts">
+        <h2>Усі обговорення категорії ${category} </h2>
 
-
-        @if(comments.isEmpty())
-            <p class="no-posts">Ще немає комментарів. Будьте першим, хто розпочне обговорення!</p>
+        @if(posts.isEmpty())
+            <p class="no-posts">Ще немає публікацій. Будьте першим, хто розпочне обговорення!</p>
         @else
             <div class="post-list">
-                @for(Comment comment : comments)
-                    <div class="post-card">
-                        <div class="post-header">
-                            <a href="/post/${comment.getId()}" class="post-title"></a>
-                            <span class="post-date">${comment.getCreatedAt().format(formatter)}</span>
-                        </div>
-                        <p class="post-excerpt">${comment.getContent()}</p>
-                        <div class="post-footer">
-                            <div class="post-author">
-                                <span>Автор: ${comment.getAuthor().getUsername()}</span>
+                @for(Post post : posts)
+                        <div class="post-card">
+                            <div class="post-header">
+                                <a href="/post/${post.getId()}" class="post-title">${post.getTitle()}</a>
+                                <span class="post-date">${post.getCreatedAt().format(formatter)}</span>
                             </div>
-                            <div class="post-stats">
-                                <span class="reply-count">0 відповідей</span>
+                            <p class="post-excerpt">${post.getContent()}</p>
+                            <div class="post-footer">
+                                <div class="post-author">
+                                    <span>Автор: ${post.getAuthor().getUsername()}</span>
+                                </div>
+                                <div class="post-stats">
+                                    <span class="reply-count">0 відповідей</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 @endfor
             </div>
         @endif
@@ -159,13 +159,13 @@ content = @`
     /* Додавання респонсивності */
     @media (min-width: 768px) {
         .post-list {
-            grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         }
     }
 
     @media (min-width: 1200px) {
         .post-list {
-            grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         }
     }
 </style>
