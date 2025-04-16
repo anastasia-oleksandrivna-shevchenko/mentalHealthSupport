@@ -1,22 +1,56 @@
 package com.shevchenko.mentalHealthSupport.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
+@Table(name = "diary_entries")
 public class Diary {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private User user;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
     private String mood;
-    private List<String> tags;
+
     private boolean isPrivate;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "diary_tags",
+            joinColumns = @JoinColumn(name = "diary_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+
+
+
     // Конструктори
-    public Diary() {
+    /*public Diary() {
         this.tags = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -155,5 +189,5 @@ public class Diary {
                 ", createdAt=" + createdAt +
                 ", isPrivate=" + isPrivate +
                 '}';
-    }
+    }*/
 }

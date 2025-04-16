@@ -1,22 +1,27 @@
 package com.shevchenko.mentalHealthSupport.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "categories")
 public class Category {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long categoryid;
+
     private String name;
     private String description;
-    private String imageUrl;
-    private int discussionCount;
-    private int userCount;
-    private int viewCount;
-    private LocalDateTime lastUpdated;
+    private String image_url;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     // Конструктори
-    public Category() {
+    /*public Category() {
         posts = new ArrayList<>();
     }
 
@@ -135,5 +140,5 @@ public class Category {
                 ", discussionCount=" + discussionCount +
                 ", userCount=" + userCount +
                 '}';
-    }
+    }*/
 }

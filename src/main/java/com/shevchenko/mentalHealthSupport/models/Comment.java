@@ -1,24 +1,32 @@
 package com.shevchenko.mentalHealthSupport.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "comments")
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String content;
-    private User author;
+    private LocalDateTime created_at;
+    private boolean is_anonymous;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
-    private Comment parent;
-    private List<Comment> replies;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private int likeCount;
-    private int helpfulCount;
-    private boolean edited;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // Конструктори
-    public Comment() {
+    /*public Comment() {
         this.replies = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -172,5 +180,5 @@ public class Comment {
                 ", edited=" + edited +
                 ", replies=" + replies.size() +
                 '}';
-    }
+    }*/
 }

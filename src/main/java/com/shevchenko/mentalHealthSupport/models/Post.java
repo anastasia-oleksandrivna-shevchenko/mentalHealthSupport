@@ -1,12 +1,45 @@
 package com.shevchenko.mentalHealthSupport.models;
 
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+@Entity
+@Table(name = "posts")
 public class Post {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long postid;
+
     private String title;
+    private String content;
+    private boolean is_anonymous;
+    private Timestamp created_at;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+
+    /*private String title;
     private String content;
     private String excerpt;
     private User author;
@@ -20,10 +53,10 @@ public class Post {
     private int helpfulCount;
     private int bookmarkCount;
     private List<Comment> comments;
-    private List<Post> relatedPosts;
+    private List<Post> relatedPosts;*/
 
     // Конструктори
-    public Post() {
+    /*public Post() {
         this.tags = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.relatedPosts = new ArrayList<>();
@@ -254,5 +287,5 @@ public class Post {
                 ", createdAt=" + createdAt +
                 ", replyCount=" + replyCount +
                 '}';
-    }
+    }*/
 }
