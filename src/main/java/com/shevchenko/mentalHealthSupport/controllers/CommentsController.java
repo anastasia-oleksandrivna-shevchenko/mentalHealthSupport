@@ -18,7 +18,7 @@ public class CommentsController {
     @GetMapping("/post/{id}")
     public String postsByCategory(@PathVariable("id") Long id, Model model) {
         // Створюємо користувача
-        User user = new User();
+        /*User user = new User();
         user.setUsername("anastasia");
         user.setEmail("anastasia@example.com");
         user.setRegisteredAt(LocalDateTime.now());
@@ -92,7 +92,7 @@ public class CommentsController {
         List<Comment> filteredComments = comments.stream()
                 .filter(comment -> comment.getPost().getId().equals(id))
                 .toList();
-        model.addAttribute("comments", filteredComments);
+        model.addAttribute("comments", filteredComments);*/
 
         return "comments";
     }

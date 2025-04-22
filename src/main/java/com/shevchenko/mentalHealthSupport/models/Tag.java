@@ -3,7 +3,11 @@ package com.shevchenko.mentalHealthSupport.models;
 import jakarta.persistence.*;
 
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "tags")
 public class Tag {
