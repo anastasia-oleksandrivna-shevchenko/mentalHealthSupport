@@ -5,7 +5,6 @@
 
 @param List<Post> posts
 @param String category
-@param DateTimeFormatter formatter
 
 @template.layout(
 title = category,
@@ -22,13 +21,13 @@ content = @`
                 @for(Post post : posts)
                         <div class="post-card">
                             <div class="post-header">
-                                <a href="/post/${post.getId()}" class="post-title">${post.getTitle()}</a>
-                                <span class="post-date">${post.getCreatedAt().format(formatter)}</span>
+                                <a href="/post/${post.getPostid()}" class="post-title">${post.getTitle()}</a>
+                                <span class="post-date">${post.getFormattedCreatedAt()}</span>
                             </div>
                             <p class="post-excerpt">${post.getContent()}</p>
                             <div class="post-footer">
                                 <div class="post-author">
-                                    <span>Автор: ${post.getAuthor().getUsername()}</span>
+                                    <span>Автор: ${post.getUser().getUsername()}</span>
                                 </div>
                                 <div class="post-stats">
                                     <span class="reply-count">0 відповідей</span>

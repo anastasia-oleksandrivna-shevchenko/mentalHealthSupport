@@ -7,7 +7,6 @@
 @param List<Category> categories
 @param List<Post> recentPosts
 @param String userName = null
-@param DateTimeFormatter formatter
 
 <%-- Коментар: Це головна сторінка форуму ментальної підтримки (d) --%>
 
@@ -53,13 +52,13 @@ content = @`
                     @if(recentPosts.indexOf(post) < 5)
                         <div class="post-card">
                                 <div class="post-header">
-                                    <a href="/post/${post.getId()}" class="post-title">${post.getTitle()}</a>
-                                    <span class="post-date">${post.getCreatedAt().format(formatter)}</span>
+                                    <a href="/post/${post.getPostid()}" class="post-title">${post.getTitle()}</a>
+                                    <span class="post-date">${post.getFormattedCreatedAt()}</span>
                                 </div>
                                 <p class="post-excerpt">${post.getContent()}</p>
                                 <div class="post-footer">
                                     <div class="post-author">
-                                        <span>Автор: ${post.getAuthor().getUsername()}</span>
+                                        <span>Автор: ${post.getUser().getUsername()}</span>
                                     </div>
                                     <div class="post-stats">
                                         <span class="reply-count">0 відповідей</span>

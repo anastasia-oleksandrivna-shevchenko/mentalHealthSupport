@@ -22,6 +22,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
     public User createUser(User user) {
         user.setCreated_at(new Timestamp(System.currentTimeMillis()));
         return userRepository.save(user);

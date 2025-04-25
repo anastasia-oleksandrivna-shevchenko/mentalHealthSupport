@@ -121,7 +121,7 @@ content = @`
                                             <span class="entry-mood" data-mood="${entry.getMood()}"></span>
                                         </span>
                                     <span class="entry-date">${entry.getCreatedAt().format(formatter)}</span>
-                                    <span class="entry-privacy">${entry.isPrivate() ? "Приватний" : "Публічний"}</span>
+                                    <span class="entry-privacy">${entry.isPrivateStatus ? "Приватний" : "Публічний"}</span>
                                 </div>
                                 <div class="entry-content">
                                     <p>${entry.getContent()}</p>
@@ -129,7 +129,7 @@ content = @`
                                 @if(!entry.getTags().isEmpty())
                                     <div class="entry-tags">
                                         @for(var tag : entry.getTags())
-                                            <span class="tag">${tag}</span>
+                                            <span class="tag">${tag.getName()}</span>
                                         @endfor
                                     </div>
                                 @endif

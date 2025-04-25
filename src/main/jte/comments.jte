@@ -5,7 +5,6 @@
 
 @param List<Comment> comments
 @param Long post
-@param DateTimeFormatter formatter
 
 @template.layout(
 title = "${post}",
@@ -23,12 +22,12 @@ content = @`
                     <div class="post-card">
                         <div class="post-header">
                             <a href="/post/${comment.getId()}" class="post-title"></a>
-                            <span class="post-date">${comment.getCreatedAt().format(formatter)}</span>
+                            <span class="post-date">${comment.getFormattedCreatedAt()}</span>
                         </div>
                         <p class="post-excerpt">${comment.getContent()}</p>
                         <div class="post-footer">
                             <div class="post-author">
-                                <span>Автор: ${comment.getAuthor().getUsername()}</span>
+                                <span>Автор: ${comment.getUser().getUsername()}</span>
                             </div>
                             <div class="post-stats">
                                 <span class="reply-count">0 відповідей</span>

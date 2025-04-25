@@ -35,8 +35,8 @@ content = @`
         <div class="profile-content">
             <div class="profile-sidebar">
                 <div class="profile-avatar">
-                    @if(user.getAvatar() != null && !user.getAvatar().isEmpty())
-                        <img src="${user.getAvatar()}" alt="${user.getUsername()}" class="avatar-img">
+                    @if(user.getAvatar_url() != null && !user.getAvatar_url().isEmpty())
+                        <img src="${user.getAvatar_url()}" alt="${user.getUsername()}" class="avatar-img">
                     @else
                         <div class="avatar-placeholder">
                             <span>${user.getUsername().substring(0, 1).toUpperCase()}</span>
@@ -46,7 +46,7 @@ content = @`
                 <div class="profile-stats">
                     <div class="stat-item">
                         <span class="stat-label">Дата реєстрації:</span>
-                        <span class="stat-value">${user.getRegisteredAt().format(formatter)}</span>
+                        <span class="stat-value">${user.getFormattedCreatedAt()}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Дописи:</span>
@@ -80,7 +80,7 @@ content = @`
 
                         <div class="form-group">
                             <label for="avatar">Посилання на аватар</label>
-                            <input type="url" id="avatar" name="avatar" value="${user.getAvatar() != null ? user.getAvatar() : ""}">
+                            <input type="url" id="avatar" name="avatar" value="${user.getAvatar_url() != null ? user.getAvatar_url() : ""}">
                             <p class="form-hint">Посилання на зображення, яке буде вашим аватаром</p>
                         </div>
 

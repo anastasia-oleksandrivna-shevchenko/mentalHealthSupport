@@ -23,7 +23,7 @@ public class Diary {
     private String content;
     private String mood;
 
-    private boolean isPrivate;
+    public boolean isPrivateStatus;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -50,6 +50,114 @@ public class Diary {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
+
+    // Конструктор без параметрів (необхідно для JPA)
+    public Diary() {
+    }
+
+    // Конструктор з параметрами (якщо необхідно)
+    public Diary(User user, String content, String mood, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.user = user;
+        this.content = content;
+        this.mood = mood;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Сетер для поля id
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    // Сетер для поля content
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    // Сетер для поля mood
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
+
+    // Сетер для поля isPrivate
+    public void setPrivate(boolean isPrivate) {
+        this.isPrivateStatus = isPrivate;
+    }
+
+    // Сетер для поля createdAt
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    // Сетер для поля updatedAt
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    // Сетер для поля user
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // Геттер та сетер для id
+    public Long getId() {
+        return id;
+    }
+
+
+
+    // Геттер та сетер для content
+    public String getContent() {
+        return content;
+    }
+
+
+
+    // Геттер та сетер для mood
+    public String getMood() {
+        return mood;
+    }
+
+
+
+    // Геттер та сетер для isPrivateStatus
+    public boolean isPrivateStatus() {
+        return isPrivateStatus;
+    }
+
+    public void setPrivateStatus(boolean isPrivateStatus) {
+        this.isPrivateStatus = isPrivateStatus;
+    }
+
+    // Геттер та сетер для createdAt
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+
+
+    // Геттер та сетер для updatedAt
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+
+
+    // Геттер та сетер для user
+    public User getUser() {
+        return user;
+    }
+
+
+    // Геттер та сетер для tags
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
 
 
 
@@ -95,7 +203,7 @@ public class Diary {
                 "id=" + id +
                 ", mood='" + mood + '\'' +
                 ", createdAt=" + createdAt +
-                ", isPrivate=" + isPrivate +
+                ", isPrivate=" + isPrivateStatus +
                 '}';
     }
 }

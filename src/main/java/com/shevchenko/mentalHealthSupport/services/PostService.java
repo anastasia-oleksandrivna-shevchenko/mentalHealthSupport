@@ -29,6 +29,10 @@ public class PostService {
         return postRepository.findByUserId(id);
     }
 
+    public  List<Post> getPostsByCategoryName(String categoryName) {
+        return postRepository.findByCategoryName(categoryName);
+    }
+
     public Post createPost(Post post) {
         post.setCreated_at(new Timestamp(System.currentTimeMillis()));
         return postRepository.save(post);
@@ -37,4 +41,9 @@ public class PostService {
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
+
+    public int countUniqueUsersByCategory(Long categoryId) {
+        return postRepository.countDistinctUsersByCategoryId(categoryId);
+    }
+
 }
