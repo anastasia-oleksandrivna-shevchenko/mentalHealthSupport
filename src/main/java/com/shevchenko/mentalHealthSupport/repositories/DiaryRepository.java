@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Integer> {
     List<Diary> findByUserId(Long userId);
-    List<Diary> findByIsPrivateFalse();
+    List<Diary> findByIsPrivateStatusFalse();
 
 }

@@ -1,4 +1,7 @@
-@param java.util.List<com.shevchenko.mentalHealthSupport.models.Category> categories
+@import com.shevchenko.mentalHealthSupport.models.Category
+
+@param java.util.List<Category> categories
+
 
 @template.layout(
 title = "Катагорії",
@@ -11,7 +14,7 @@ content = @`
     </div>
     <div class="categories-wrapper">
         <div class="categories">
-            @for(com.shevchenko.mentalHealthSupport.models.Category category : categories)
+            @for(Category category : categories)
                 <div class="category-card">
                     <div class="category-layout">
                         <div class="category-image">
@@ -25,7 +28,7 @@ content = @`
                     </div>
                     <div class="category-footer">
                         <span class="category-meta">${category.getDiscussionCount()} обговорень</span>
-                        <span class="category-meta">${category.getUserCount()} учасників</span>
+
                     </div>
                 </div>
             @endfor

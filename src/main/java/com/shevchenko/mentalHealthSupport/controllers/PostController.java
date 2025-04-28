@@ -25,10 +25,5 @@ public class PostController {
         model.addAttribute("posts", posts);
         return "posts";
     }
-    @GetMapping("")
-    public String index(Model model) {
-        List<Post> posts = postRepository.findAll();
-        model.addAttribute("recentPosts", posts);
-        return "index";
-    }
+
 }

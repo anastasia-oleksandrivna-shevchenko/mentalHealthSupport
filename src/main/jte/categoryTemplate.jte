@@ -1,7 +1,7 @@
 @param String Url
 @param String Name
 @param String Description
-@param int UserCount
+
 @param int DiscussionCount
 
 <!DOCTYPE html>
@@ -79,7 +79,7 @@
     </div>
     <div class="category-footer">
         <span class="category-meta">${DiscussionCount} обговорень</span>
-        <span class="category-meta">${UserCount} учасників</span>
+
     </div>
 </div>
 

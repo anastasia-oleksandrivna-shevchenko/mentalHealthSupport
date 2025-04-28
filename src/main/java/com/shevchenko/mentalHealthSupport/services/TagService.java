@@ -2,8 +2,7 @@ package com.shevchenko.mentalHealthSupport.services;
 
 import com.shevchenko.mentalHealthSupport.models.Tag;
 import com.shevchenko.mentalHealthSupport.repositories.TagRepository;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

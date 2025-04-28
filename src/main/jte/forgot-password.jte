@@ -30,18 +30,18 @@ content = @`
 
             <form action="/forgot-password" method="POST" class="auth-form">
                 <div class="form-group">
-                    <label for="username">Ім'я користувача*</label>
-                    <input type="text" id="username" name="username" required placeholder="Введіть ваше ім'я користувача">
+                    <label for="username1">Ім'я користувача*</label>
+                    <input type="text" id="username1" name="username1" required placeholder="Введіть ваше ім'я користувача">
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Пароль*</label>
-                    <input type="password" id="password1" name="password" required placeholder="Введіть ваш пароль">
+                    <label for="password1">Пароль*</label>
+                    <input type="password" id="password1" name="password1" required placeholder="Введіть ваш пароль">
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Повторіть пароль*</label>
-                    <input type="password" id="password2" name="password" required placeholder="Повторіть ваш пароль">
+                    <label for="password2">Повторіть пароль*</label>
+                    <input type="password" id="password2" name="password2" required placeholder="Повторіть ваш пароль">
                 </div>
 
 

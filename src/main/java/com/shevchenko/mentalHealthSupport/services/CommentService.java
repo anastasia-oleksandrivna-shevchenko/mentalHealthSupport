@@ -17,7 +17,7 @@ public class CommentService {
         return commentRepository.findByUserId(userId);
     }
     public List<Comment> findByPostId(Long postId) {
-        return commentRepository.findByPostId(postId);
+        return commentRepository.findByPostPostid(postId);
     }
     public Comment save(Comment comment) {
         comment.setCreated_at(new Timestamp(System.currentTimeMillis()));

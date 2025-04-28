@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post,Long> {
-    List<Post> findByCategoryId(Long categoryId);
+    List<Post> findByCategoryCategoryid(Long categoryId);
     List<Post> findByUserId(Long userId);
     List<Post> findByCategoryName(String categoryName);
 

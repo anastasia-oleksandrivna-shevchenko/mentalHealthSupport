@@ -19,7 +19,7 @@ public class DiaryService {
         return diaryRepository.findByUserId(userId);
     }
     public List<Diary> findPublicEntries() {
-        return diaryRepository.findByIsPrivateFalse();
+        return diaryRepository.findByIsPrivateStatusFalse();
     }
     public Diary save(Diary diary) {
         return diaryRepository.save(diary);

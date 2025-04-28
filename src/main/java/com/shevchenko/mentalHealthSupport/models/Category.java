@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -22,8 +20,8 @@ public class Category {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Transient
-    private int userCount;
+    //@Transient
+    //private int userCount;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts;
@@ -32,13 +30,13 @@ public class Category {
         return posts != null ? posts.size() : 0;
     }
 
-    public int getUserCount() {
-        return userCount;
-    }
+    //public int getUserCount() {
+        //return userCount;
+    //}
 
-    public void setUserCount(int userCount) {
-        this.userCount = userCount;
-    }
+    //public void setUserCount(int userCount) {
+       // this.userCount = userCount;
+    //}
 
     // Геттер та сетер для categoryid
     public Long getCategoryid() {

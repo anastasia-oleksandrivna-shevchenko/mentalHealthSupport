@@ -18,7 +18,7 @@ public class CommentController {
     @GetMapping("/category/{post}")
     public String postsByCategory(@PathVariable("post") Long post, Model model) {
         model.addAttribute("post", post);
-        List<Comment> comments = commentRepository.findByPostId(post);
+        List<Comment> comments = commentRepository.findByPostPostid(post);
         model.addAttribute("comments", comments);
         return "comments";
     }

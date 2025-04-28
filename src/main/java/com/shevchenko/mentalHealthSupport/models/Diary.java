@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+
 @Entity
 @Table(name = "diary_entries")
 public class Diary {
@@ -23,9 +21,12 @@ public class Diary {
     private String content;
     private String mood;
 
+    @Column(name = "is_private_status")
     public boolean isPrivateStatus;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne

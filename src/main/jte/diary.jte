@@ -18,7 +18,7 @@ content = @`
         @else
             <div class="diary-emotions">
                 <h2>Як ви почуваєтесь сьогодні?</h2>
-                <form action="/diary/add" method="post" class="emotion-form">
+                <form action="/diary" method="post" class="emotion-form">
                     <div class="mood-selector">
                         <label>
                             <input type="radio" name="mood" value="great">
@@ -115,10 +115,10 @@ content = @`
                         <p class="no-entries">У вас ще немає жодного запису в щоденнику. Створіть свій перший запис!</p>
                     @else
                         @for(var entry : diaryEntries)
-                            <div class="diary-entry" data-mood="${entry.getMood()}" data-date="${entry.getCreatedAt().format(formatter)}">
+                            <div class="diary-entry" data-mood="${entry.getMoodEmoji()}" data-date="${entry.getCreatedAt().format(formatter)}">
                                 <div class="entry-header">
                                         <span class="entry-mood">
-                                            <span class="entry-mood" data-mood="${entry.getMood()}"></span>
+                                            <span class="entry-mood" data-mood="${entry.getMoodEmoji()}"></span>
                                         </span>
                                     <span class="entry-date">${entry.getCreatedAt().format(formatter)}</span>
                                     <span class="entry-privacy">${entry.isPrivateStatus ? "Приватний" : "Публічний"}</span>
@@ -418,6 +418,25 @@ content = @`
                 gap: 1rem;
             }
         }
+        .mood-chart {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .mood-chart h3 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+            position: relative;
+        }
     </style>
 
     <script>
@@ -461,6 +480,8 @@ content = @`
                 default: return "😐";
             }
         }
+
+
 
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll('.entry-mood').forEach(span => {

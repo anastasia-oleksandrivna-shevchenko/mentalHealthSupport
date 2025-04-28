@@ -3,11 +3,9 @@ package com.shevchenko.mentalHealthSupport.models;
 import jakarta.persistence.*;
 
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -21,7 +19,7 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Set<Diary> diaries;
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany(mappedBy = "tags")
     private Set<Post> posts;
 
     // Геттер та сетер для id

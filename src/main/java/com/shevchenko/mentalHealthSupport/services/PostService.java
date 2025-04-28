@@ -23,7 +23,7 @@ public class PostService {
     }
 
     public List<Post> getPostsByCategory(long id) {
-        return postRepository.findByCategoryId(id);
+        return postRepository.findByCategoryCategoryid(id);
     }
     public List<Post> getPostsByUser(long id) {
         return postRepository.findByUserId(id);
