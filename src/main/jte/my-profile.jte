@@ -60,7 +60,6 @@ content = @`
                 <div class="profile-actions">
                     <a href="/my-posts" class="action-btn">Мої дописи</a>
                     <a href="/my-comments" class="action-btn">Мої коментарі</a>
-                    <a href="/bookmarks" class="action-btn">Збережені дописи</a>
                 </div>
             </div>
 

@@ -13,6 +13,8 @@ showHero = false,
 content = @`
     <div class="category-posts">
 
+        <h2>Коментарі</h2>
+        <a href="/post/${post}/new" class="add-button">+ Додати коментар</a>
 
         @if(comments.isEmpty())
             <p class="no-posts">Ще немає комментарів. Будьте першим, хто розпочне обговорення!</p>
@@ -27,7 +29,9 @@ content = @`
                         <p class="post-excerpt">${comment.getContent()}</p>
                         <div class="post-footer">
                             <div class="post-author">
+                                @if(!comment.getIs_anonymous())
                                 <span>Автор: ${comment.getUser().getUsername()}</span>
+                                @endif
                             </div>
                             <div class="post-stats">
                                 <span class="reply-count">0 відповідей</span>

@@ -18,12 +18,12 @@ content = @`
                 <div class="category-card">
                     <div class="category-layout">
                         <div class="category-image">
-                            <img src="${category.getImageUrl()}" alt="${category.getName()}">
+                            <img src="${category.getImageUrl()}" alt="${category.getCategoryid()}">
                         </div>
                         <div class="category-content">
                             <h3>${category.getName()}</h3>
                             <p>${category.getDescription()}</p>
-                            <a href="/category/${category.getName()}" class="btn">Переглянути тему</a>
+                            <a href="/category/${category.getCategoryid()}" class="btn">Переглянути тему</a>
                         </div>
                     </div>
                     <div class="category-footer">

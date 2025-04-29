@@ -44,7 +44,7 @@ content = @`
                 <div class="form-group">
                     <label for="password">Пароль*</label>
                     <input type="password" id="password" name="password" required placeholder="Створіть надійний пароль">
-                    <p class="form-hint">Мінімум 8 символів, включаючи літери та цифри</p>
+                    <p class="form-hint">Мінімум 8 символів</p>
                 </div>
 
                 <div class="form-group">
@@ -53,13 +53,38 @@ content = @`
                 </div>
 
                 <div class="form-group">
-                    <label for="avatar">Посилання на аватар (необов'язково)</label>
+                    <label for="avatar">Посилання на аватар</label>
                     <input type="url" id="avatar" name="avatar" placeholder="https://example.com/your-avatar.jpg">
                     <p class="form-hint">Посилання на зображення, яке буде вашим аватаром</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="bio">Про себе (необов'язково)</label>
+                    <label for="firstName">Ім'я</label>
+                    <textarea id="firstName" name="firstName" rows="1" placeholder="Вкажіть ваше ім'я"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Прізвище</label>
+                    <textarea id="lastName" name="lastName" rows="1" placeholder="Вкажіть ваше прізвище"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Вік</label>
+                    <input type="number" id="age" name="age" min="0" placeholder="Вкажіть ваш вік">
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Стать</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Оберіть стать</option>
+                        <option value="male">Чоловік</option>
+                        <option value="female">Жінка</option>
+                        <option value="none">Не хочу вказувати</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Про себе</label>
                     <textarea id="bio" name="bio" rows="3" placeholder="Розкажіть коротко про себе..."></textarea>
                 </div>
 

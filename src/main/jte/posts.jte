@@ -1,18 +1,17 @@
 @import com.shevchenko.mentalHealthSupport.models.Post
-@import com.shevchenko.mentalHealthSupport.models.Category
-@import java.time.format.DateTimeFormatter
 @import java.util.List
 
 @param List<Post> posts
-@param String category
+@param Long category
 
 @template.layout(
-title = category,
+title = "Категорія",
 description = "Усі пости категорії",
 showHero = false,
 content = @`
     <div class="category-posts">
-        <h2>Усі обговорення категорії ${category} </h2>
+        <h2>Усі обговорення</h2>
+        <a href="/category/${category}/new" class="add-button">+ Додати обговорення</a>
 
         @if(posts.isEmpty())
             <p class="no-posts">Ще немає публікацій. Будьте першим, хто розпочне обговорення!</p>
@@ -25,12 +24,21 @@ content = @`
                                 <span class="post-date">${post.getFormattedCreatedAt()}</span>
                             </div>
                             <p class="post-excerpt">${post.getContent()}</p>
+                            @if(!post.getTags().isEmpty())
+                                <div class="entry-tags">
+                                    @for(var tag : post.getTags())
+                                        <span class="tag">${tag.getName()}</span>
+                                    @endfor
+                                </div>
+                            @endif
                             <div class="post-footer">
                                 <div class="post-author">
+                                    @if(!post.getIs_anonymous())
                                     <span>Автор: ${post.getUser().getUsername()}</span>
+                                    @endif
                                 </div>
                                 <div class="post-stats">
-                                    <span class="reply-count">0 відповідей</span>
+                                    <span class="reply-count">${post.getDiscussionCount()} відповідей</span>
                                 </div>
                             </div>
                         </div>

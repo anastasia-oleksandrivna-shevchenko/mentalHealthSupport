@@ -35,7 +35,7 @@ content = @`
         <div class="categories">
             @for(Category category : categories)
                 @if(categories.indexOf(category) < 3)
-                    @template.categoryTemplate(Url = category.getImageUrl(), Name = category.getName(), Description = category.getDescription(),  DiscussionCount = category.getDiscussionCount())
+                    @template.categoryTemplate(Url = category.getImageUrl(), Name = category.getName(), Description = category.getDescription(),  DiscussionCount = category.getDiscussionCount(), Categoryid = category.getCategoryid())
                 @endif
             @endfor
         </div>

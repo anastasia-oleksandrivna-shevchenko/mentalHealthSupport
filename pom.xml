@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<flyway.cleanDisabled>false</flyway.cleanDisabled>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -60,6 +61,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>10.20.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>10.20.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>annotationProcessor</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -87,6 +104,19 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.20.1</version>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/mental_health_support</url>
+					<user>postgres</user>
+					<password>1234567890</password>
+					<schemas>
+						<schema>public</schema>
+					</schemas>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,11 +1,15 @@
 package com.shevchenko.mentalHealthSupport.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -20,42 +24,8 @@ public class Tag {
     private Set<Diary> diaries;
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Post> posts;
+    private Set<Post> posts = new HashSet<>();
 
-    // Геттер та сетер для id
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    // Геттер та сетер для name
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // Геттер та сетер для diaries
-    public Set<Diary> getDiaries() {
-        return diaries;
-    }
-
-    public void setDiaries(Set<Diary> diaries) {
-        this.diaries = diaries;
-    }
-
-    // Геттер та сетер для posts
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
 
 }

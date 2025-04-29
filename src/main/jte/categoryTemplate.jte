@@ -1,6 +1,7 @@
 @param String Url
 @param String Name
 @param String Description
+@param Long Categoryid
 
 @param int DiscussionCount
 
@@ -74,7 +75,7 @@
         <div class="category-content">
             <h3>${Name}</h3>
             <p>${Description}</p>
-            <a href="/category/${Name}" class="btn">Переглянути тему</a>
+            <a href="/category/${Categoryid}" class="btn">Переглянути тему</a>
         </div>
     </div>
     <div class="category-footer">

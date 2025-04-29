@@ -21,7 +21,7 @@ content = @`
                 <form action="/diary" method="post" class="emotion-form">
                     <div class="mood-selector">
                         <label>
-                            <input type="radio" name="mood" value="great">
+                            <input type="radio" name="mood" value="great" required>
                             <span class="mood-emoji">😄</span>
                             <span class="mood-text">Чудово</span>
                         </label>
@@ -102,23 +102,29 @@ content = @`
                     </label>
                 </div>
 
-                <div class="mood-chart">
-                    <h3>Динаміка вашого настрою</h3>
-                    <div class="chart-container">
-                        <!-- Тут буде відображатися графік настрою -->
-                        <p class="chart-placeholder">Графік динаміки настрою буде відображено тут</p>
-                    </div>
-                </div>
 
                 <div class="diary-entries">
                     @if(diaryEntries.isEmpty())
                         <p class="no-entries">У вас ще немає жодного запису в щоденнику. Створіть свій перший запис!</p>
                     @else
                         @for(var entry : diaryEntries)
-                            <div class="diary-entry" data-mood="${entry.getMoodEmoji()}" data-date="${entry.getCreatedAt().format(formatter)}">
+                            <div class="diary-entry" data-mood="${entry.getMood()}" data-date="${entry.getCreatedAt().format(formatter)}">
                                 <div class="entry-header">
                                         <span class="entry-mood">
-                                            <span class="entry-mood" data-mood="${entry.getMoodEmoji()}"></span>
+                                            @if(entry.getMood().equals("great") )
+                                                <span class="entry-mood" data-mood="great">😄</span>
+                                            @elseif(entry.getMood().equals("good"))
+                                                <span class="entry-mood" data-mood="good">🙂</span>
+                                            @elseif(entry.getMood().equals("neutral"))
+                                                <span class="entry-mood" data-mood="neutral">😐</span>
+                                            @elseif(entry.getMood().equals("bad"))
+                                                <span class="entry-mood" data-mood="bad">😔</span>
+                                            @elseif(entry.getMood().equals("awful"))
+                                                <span class="entry-mood" data-mood="awful">😞</span>
+                                            @else
+                                                <span class="entry-mood" data-mood="neutral">😐</span>
+                                            @endif
+
                                         </span>
                                     <span class="entry-date">${entry.getCreatedAt().format(formatter)}</span>
                                     <span class="entry-privacy">${entry.isPrivateStatus ? "Приватний" : "Публічний"}</span>
@@ -445,22 +451,49 @@ content = @`
             const moodFilter = document.getElementById('moodFilter').value;
 
             const entries = document.querySelectorAll('.diary-entry');
+            const now = new Date();
+
+            const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+            const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
 
             entries.forEach(entry => {
                 const mood = entry.dataset.mood;
-                const date = new Date(entry.dataset.date);
-                const now = new Date();
+                const dateStr = entry.dataset.date;
+
+                let date;
+                try {
+                    // Розділяємо рядок на компоненти
+                    const [datePart, timePart] = dateStr.split(' ');
+                    const [day, month, year] = datePart.split('.');
+                    const [hours, minutes] = timePart ? timePart.split(':') : ['0', '0'];
+
+                    // Створюємо об'єкт Date (місяці в JavaScript починаються з 0)
+                    date = new Date(
+                        parseInt(year),
+                        parseInt(month) - 1,
+                        parseInt(day),
+                        parseInt(hours),
+                        parseInt(minutes)
+                    );
+
+                    // Перевірка на валідність дати
+                    if (isNaN(date.getTime())) {
+                        console.error('Invalid date constructed from:', dateStr);
+                        date = new Date(0); // Використовуємо стару дату, щоб елемент не пройшов часовий фільтр
+                    }
+                } catch (error) {
+                    console.error('Error parsing date:', dateStr, error);
+                    date = new Date(0);
+                }
 
                 let showByTime = true;
-                if (timeFilter === 'week') {
-                    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    showByTime = date >= oneWeekAgo;
-                } else if (timeFilter === 'month') {
-                    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-                    showByTime = date >= oneMonthAgo;
-                } else if (timeFilter === 'year') {
-                    const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                    showByTime = date >= oneYearAgo;
+                if (timeFilter === 'week' && date < oneWeekAgo) {
+                    showByTime = false;
+                } else if (timeFilter === 'month' && date < oneMonthAgo) {
+                    showByTime = false;
+                } else if (timeFilter === 'year' && date < oneYearAgo) {
+                    showByTime = false;
                 }
 
                 const showByMood = moodFilter === 'all' || mood === moodFilter;
@@ -468,27 +501,6 @@ content = @`
                 entry.style.display = (showByTime && showByMood) ? 'block' : 'none';
             });
         }
-
-        // Допоміжні функції для шаблону
-        function getMoodEmoji(mood) {
-            switch(mood) {
-                case "great": return "😄";
-                case "good": return "🙂";
-                case "neutral": return "😐";
-                case "bad": return "😔";
-                case "awful": return "😞";
-                default: return "😐";
-            }
-        }
-
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('.entry-mood').forEach(span => {
-                const mood = span.dataset.mood;
-                span.textContent = getMoodEmoji(mood);
-            });
-        });
 
     </script>
 `
