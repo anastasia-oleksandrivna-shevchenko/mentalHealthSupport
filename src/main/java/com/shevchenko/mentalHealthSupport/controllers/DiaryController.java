@@ -8,6 +8,10 @@ import com.shevchenko.mentalHealthSupport.repositories.TagRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +37,17 @@ public class DiaryController {
     @Autowired
     private TagRepository tagRepository;
 
-    @Autowired
-    private HttpSession session;
 
     @GetMapping("/diary")
-    public String showDiary(Model model) {
-        String username = (String) session.getAttribute("username");
+    public String showDiary(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        boolean isLoggedIn = userDetails != null;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+        String username = userDetails.getUsername();
+
+        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);
+
         if (username == null) {
             return "redirect:/login?redirect=/diary";
         }
@@ -58,9 +67,10 @@ public class DiaryController {
     public String addDiary(@RequestParam("content") String content,
                            @RequestParam("mood") String mood,
                            @RequestParam("isPrivate") Boolean isPrivate,
-                           @RequestParam(required = false) List<String> tags) {
+                           @RequestParam(required = false) List<String> tags,
+                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        String username = (String) session.getAttribute("username");
+        String username = userDetails.getUsername();
 
         if (username == null) {
             return "redirect:/login?redirect=/diary";
@@ -103,8 +113,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary/delete/{id}")
-    public String deleteDiaryEntry(@PathVariable("id") Integer id) {
-        String username = (String) session.getAttribute("username");
+    public String deleteDiaryEntry(@PathVariable("id") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/diary";
         }
@@ -126,8 +136,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        String username = (String) session.getAttribute("username");
+    public String showEditForm(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/diary";
         }
@@ -157,9 +167,10 @@ public class DiaryController {
                               @RequestParam("content") String content,
                               @RequestParam("mood") String mood,
                               @RequestParam("isPrivate") Boolean isPrivate,
-                              @RequestParam(required = false) List<String> tags) {
+                              @RequestParam(required = false) List<String> tags,
+                              @AuthenticationPrincipal UserDetails userDetails) {
 
-        String username = (String) session.getAttribute("username");
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/diary";
         }

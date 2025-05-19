@@ -1,6 +1,7 @@
 @param String errorMessage = null
 @param String successMessage = null
 @param String redirectUrl = null
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 @template.layout(
 title = "Увійти до системи",
@@ -29,6 +30,9 @@ content = @`
             @endif
 
             <form action="/login" method="POST" class="auth-form">
+                @if(_csrf != null)
+                    <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                @endif
                 <div class="form-group">
                     <label for="username">Ім'я користувача*</label>
                     <input type="text" id="username" name="username" required placeholder="Введіть ваше ім'я користувача">
@@ -60,7 +64,8 @@ content = @`
             </div>
         </div>
     </div>
-`
+`,
+isLoggedIn = false
 )
 
 <style>

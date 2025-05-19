@@ -31,6 +31,7 @@ public class User {
     private String gender;
     private String bio;
     private Timestamp created_at;
+    private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;

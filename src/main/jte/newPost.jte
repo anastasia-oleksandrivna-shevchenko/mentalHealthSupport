@@ -1,4 +1,6 @@
 @param Long category
+@param org.springframework.security.web.csrf.CsrfToken _csrf
+@param boolean isLoggedIn
 
 @template.layout(
 title = "Додати пост",
@@ -8,6 +10,7 @@ content = @`
     <div class="auth-container">
         <div class="auth-card">
             <form action="/category/${category}/new" method="POST" class="auth-form">
+                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                 <div class="form-group">
                     <label for="title">Введіть назву поста</label>
                     <input type="text" id="title" name="title" required placeholder="Введіть назву">
@@ -35,7 +38,9 @@ content = @`
             </form>
         </div>
     </div>
-`)
+`,
+isLoggedIn = isLoggedIn
+)
 
 <style>
     .auth-container {

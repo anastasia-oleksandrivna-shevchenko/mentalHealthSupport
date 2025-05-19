@@ -1,6 +1,8 @@
 @import com.shevchenko.mentalHealthSupport.models.Category
 
 @param java.util.List<Category> categories
+@param boolean isAdmin
+@param boolean isLoggedIn
 
 
 @template.layout(
@@ -11,6 +13,9 @@ content = @`
     <div class="intro">
         <h2>Наші категорії</h2>
         <p>На форумі наразі доступно ${categories.size()} категорій</p>
+        @if(isAdmin)
+            <a href="/category/new" class="add-button">+ Додати категорію</a>
+        @endif
     </div>
     <div class="categories-wrapper">
         <div class="categories">
@@ -28,13 +33,18 @@ content = @`
                     </div>
                     <div class="category-footer">
                         <span class="category-meta">${category.getDiscussionCount()} обговорень</span>
-
                     </div>
+                    @if(isAdmin)
+                        <form method="post" action="/category/${category.getCategoryid()}/delete" class="delete-form">
+                            <button type="submit" class="delete-button">Видалити</button>
+                        </form>
+                    @endif
                 </div>
             @endfor
         </div>
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 
 <style>

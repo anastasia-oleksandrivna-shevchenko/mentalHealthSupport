@@ -2,6 +2,7 @@
 @param String description = "Форум ментальної підтримки"
 @param boolean showHero = true
 @param gg.jte.Content content
+@param boolean isLoggedIn
 
 <!DOCTYPE html>
 <html lang="uk">
@@ -115,7 +116,11 @@
                     <li><a href="/diary">Особистий щоденник</a></li>
                     <li><a href="/about">Про нас</a></li>
                     <li><a href="/profile">Мій профіль</a></li>
-                    <li><a href="/login">Увійти</a></li>
+                    @if(isLoggedIn)
+                        <li><a href="/logout">Вийти</a></li>
+                    @else
+                        <li><a href="/login">Увійти</a></li>
+                    @endif
                 </ul>
             </nav>
         </div>

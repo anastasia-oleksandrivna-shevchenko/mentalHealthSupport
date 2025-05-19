@@ -3,6 +3,8 @@
 
 @param List<Post> posts
 @param Long category
+@param boolean isAdmin
+@param boolean isLoggedIn
 
 @template.layout(
 title = "Категорія",
@@ -40,13 +42,20 @@ content = @`
                                 <div class="post-stats">
                                     <span class="reply-count">${post.getDiscussionCount()} відповідей</span>
                                 </div>
+                                @if(isAdmin)
+                                    <form method="post" action="/post/${post.getPostid()}/delete" class="delete-form">
+                                        <button type="submit" class="delete-button">Видалити</button>
+                                    </form>
+                                @endif
+
                             </div>
                         </div>
                 @endfor
             </div>
         @endif
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 <style>
     .category-posts {
@@ -175,4 +184,45 @@ content = @`
         grid-template-columns: repeat(3, 1fr);
         }
     }
+
+    .delete-form {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    .delete-button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+    }
+
+    .delete-button:hover {
+        background-color: #c0392b;
+    }
+
+    .delete-form {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    .delete-button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+    }
+
+    .delete-button:hover {
+        background-color: #c0392b;
+    }
+
 </style>

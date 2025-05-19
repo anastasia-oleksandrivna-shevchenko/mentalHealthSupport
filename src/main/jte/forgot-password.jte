@@ -1,6 +1,8 @@
 @param String errorMessage = null
 @param String successMessage = null
 @param String redirectUrl = null
+@param org.springframework.security.web.csrf.CsrfToken _csrf
+@param boolean isLoggedIn
 
 @template.layout(
 title = "Змінити пароль",
@@ -29,6 +31,7 @@ content = @`
             @endif
 
             <form action="/forgot-password" method="POST" class="auth-form">
+                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                 <div class="form-group">
                     <label for="username1">Ім'я користувача*</label>
                     <input type="text" id="username1" name="username1" required placeholder="Введіть ваше ім'я користувача">
@@ -58,7 +61,8 @@ content = @`
             </div>
         </div>
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 
 <style>

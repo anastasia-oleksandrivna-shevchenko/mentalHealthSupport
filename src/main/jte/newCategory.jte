@@ -1,23 +1,26 @@
-@param Long post
 @param org.springframework.security.web.csrf.CsrfToken _csrf
 @param boolean isLoggedIn
 
 @template.layout(
-title = "Додати коммент",
-description = "Додавання комменту",
+title = "Додати категорію",
+description = "Додавання категорії",
 showHero = false,
 content = @`
     <div class="auth-container">
         <div class="auth-card">
-            <form action="/posts/${post}/new" method="POST" class="auth-form">
+            <form action="/category/new" method="POST" class="auth-form">
                 <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                 <div class="form-group">
-                    <label for="content">Контент</label>
-                    <textarea id="content" name="content" rows="3" placeholder="Поділіться думками щодо посту..."></textarea>
+                    <label for="title">Введіть назву категорії</label>
+                    <input type="text" id="title" name="title" required placeholder="Введіть назву">
                 </div>
-                <div class="form-group form-checkbox">
-                    <input type="checkbox" id="isAnonymous" name="isAnonymous">
-                    <label for="isAnonymous">Анонімно</label>
+                <div class="form-group">
+                    <label for="content">Опис</label>
+                    <textarea id="content" name="content" rows="3" placeholder="Напишіть опис категорії"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image">Посилання на фото</label>
+                    <textarea id="image" name="image" rows="1" placeholder="Додайте посилання на фото"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Додати</button>
             </form>
@@ -149,5 +152,22 @@ isLoggedIn = isLoggedIn
             padding: 10px 12px;
             font-size: 14px;
         }
+    }
+    .tags-selector {
+        margin: 1rem 0;
+    }
+
+    .tags-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
+    .tags-options label {
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 </style>

@@ -10,6 +10,12 @@ import com.shevchenko.mentalHealthSupport.repositories.TagRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,19 +45,44 @@ public class PostController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    HttpSession session;
 
     @GetMapping("/category/{categoryid}")
-    public String postsByCategory(@PathVariable("categoryid") Long categoryid, Model model) {
+    public String postsByCategory(@PathVariable("categoryid") Long categoryid,
+                                  Model model,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
+
+        boolean isLoggedIn = userDetails != null;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
         model.addAttribute("category", categoryid);
+
         List<Post> posts = postRepository.findByCategoryCategoryid(categoryid);
         model.addAttribute("posts", posts);
+
+        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        model.addAttribute("isAdmin", isAdmin);
+
         return "posts";
     }
     @GetMapping("/category/{categoryid}/new")
-    public String showAddForm(@PathVariable("categoryid") Long categoryid, Model model) {
+    public String showAddForm(@PathVariable("categoryid") Long categoryid,
+                              Model model,
+                              @AuthenticationPrincipal UserDetails userDetails) {
+
+        boolean isLoggedIn = userDetails != null;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
         model.addAttribute("category", categoryid);
+
+        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);
+
         return "newPost";
     }
 
@@ -61,9 +92,11 @@ public class PostController {
                              @RequestParam String content,
                              @RequestParam (name = "isAnonymous", required = false) Boolean isAnonymous,
                              @PathVariable("categoryid") Long categoryid,
-                             @RequestParam(required = false) List<String> tags){
+                             @RequestParam(required = false) List<String> tags,
+                             @AuthenticationPrincipal UserDetails userDetails){
 
-        String username = (String) session.getAttribute("username");
+        String username = userDetails.getUsername();
+
         if (username == null) {
             return "redirect:/login?redirect=/profile";
         }
@@ -107,8 +140,8 @@ public class PostController {
     }
 
     @GetMapping("/my-posts")
-    public String ShowMyPosts(Model model){
-        String username = (String) session.getAttribute("username");
+    public String ShowMyPosts(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/profile";
         }
@@ -120,5 +153,19 @@ public class PostController {
         model.addAttribute("category", 1L);
         return "posts";
     }
+
+    @PostMapping("/post/{id}/delete")
+    public String deletePost(@PathVariable("id") Long postId) {
+
+        Optional<Post> optionalPost = postRepository.findById(postId);
+
+        Post post = optionalPost.get();
+
+            postRepository.delete(post);
+
+
+        return "redirect:/";
+    }
+
 
 }

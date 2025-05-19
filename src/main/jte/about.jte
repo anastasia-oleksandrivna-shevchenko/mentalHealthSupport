@@ -1,3 +1,5 @@
+@param boolean isLoggedIn
+
 @template.layout(
 title = "Про нас",
 description = "Інформація про нашу організацію",
@@ -23,7 +25,8 @@ content = @`
         <h2>Зв’язок з нами</h2>
         <p>Маєте питання або пропозиції? Напишіть нам на <a href="mailto:support@example.com">support@example.com</a> або скористайтеся формою зворотного зв’язку на сайті.</p>
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 
 <style>

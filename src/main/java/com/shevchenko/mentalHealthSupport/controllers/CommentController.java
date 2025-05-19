@@ -8,6 +8,12 @@ import com.shevchenko.mentalHealthSupport.repositories.PostRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,21 +36,41 @@ public class CommentController {
     private UserRepository userRepository;
 
     @Autowired
-    private HttpSession session;
-
-    @Autowired
     private PostRepository postRepository;
 
     @GetMapping("/post/{post}")
-    public String commentsByPost(@PathVariable("post") Long post, Model model) {
+    public String commentsByPost(@PathVariable("post") Long post, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+        boolean isLoggedIn = userDetails != null;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
         model.addAttribute("post", post);
+
         List<Comment> comments = commentRepository.findByPostPostid(post);
         model.addAttribute("comments", comments);
+
+        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        model.addAttribute("isAdmin", isAdmin);
+
         return "comments";
     }
     @GetMapping("/post/{post}/new")
-    public String showAddForm(@PathVariable("post") Long post, Model model) {
+    public String showAddForm(@PathVariable("post") Long post, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+        boolean isLoggedIn = userDetails != null;
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
         model.addAttribute("post", post);
+
+        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);
+
         return "newComment";
     }
 
@@ -52,9 +78,10 @@ public class CommentController {
     public String AddNewComment(Model model,
                                 @RequestParam String content,
                                 @RequestParam (name = "isAnonymous", required = false) Boolean isAnonymous,
-                                @PathVariable("postid") Long post){
+                                @PathVariable("postid") Long post,
+                                @AuthenticationPrincipal UserDetails userDetails){
 
-        String username = (String) session.getAttribute("username");
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/profile";
         }
@@ -85,8 +112,8 @@ public class CommentController {
     }
 
     @GetMapping("/my-comments")
-    public String ShowMyComments(Model model){
-        String username = (String) session.getAttribute("username");
+    public String ShowMyComments(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/profile";
         }
@@ -95,5 +122,17 @@ public class CommentController {
         model.addAttribute("comments", comments);
         model.addAttribute("post", 1L);
         return "comments";
+    }
+    @PostMapping("/comment/{id}/delete")
+    public String deletePost(@PathVariable("id") Long commentId) {
+
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+
+        Comment comment = optionalComment.get();
+
+        commentRepository.delete(comment);
+
+
+        return "redirect:/";
     }
 }

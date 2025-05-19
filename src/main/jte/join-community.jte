@@ -1,8 +1,10 @@
+@import org.springframework.security.web.csrf.CsrfToken
 @import java.util.List
 @import java.util.Set
 
 @param String errorMessage = null
 @param String successMessage = null
+@param CsrfToken _csrf
 
 @template.layout(
 title = "Долучитись до спільноти",
@@ -31,6 +33,9 @@ content = @`
             @endif
 
             <form action="/register" method="POST" class="auth-form">
+                @if(_csrf != null)
+                    <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                @endif
                 <div class="form-group">
                     <label for="username">Ім'я користувача*</label>
                     <input type="text" id="username" name="username" required placeholder="Введіть ваше ім'я користувача">
@@ -97,11 +102,12 @@ content = @`
             </form>
 
             <div class="auth-footer">
-                <p>Вже є аккаунт? <a href="/login" class="link">Увійти</a></p>
+                <p>Вже є акаунт? <a href="/login" class="link">Увійти</a></p>
             </div>
         </div>
     </div>
-`
+`,
+isLoggedIn = false
 )
 
 <style>

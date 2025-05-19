@@ -1,5 +1,6 @@
 @import com.shevchenko.mentalHealthSupport.models.Category
 @import com.shevchenko.mentalHealthSupport.models.Post
+@import org.springframework.security.web.csrf.CsrfToken
 @import java.util.List
 @import java.time.format.DateTimeFormatter
 
@@ -7,6 +8,7 @@
 @param List<Category> categories
 @param List<Post> recentPosts
 @param String userName = null
+@param boolean isLoggedIn
 
 <%-- Коментар: Це головна сторінка форуму ментальної підтримки (d) --%>
 
@@ -70,8 +72,8 @@ content = @`
             </div>
         @endif
     </div>
-
-`
+`,
+isLoggedIn = isLoggedIn
 )
 
 <style>

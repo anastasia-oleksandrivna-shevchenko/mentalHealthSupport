@@ -1,4 +1,5 @@
 @import com.shevchenko.mentalHealthSupport.models.User
+@import org.springframework.security.web.csrf.CsrfToken
 @import java.time.LocalDateTime
 @import java.time.format.DateTimeFormatter
 
@@ -6,6 +7,8 @@
 @param String errorMessage = null
 @param String successMessage = null
 @param DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+@param CsrfToken _csrf
+@param boolean isLoggedIn
 
 @template.layout(
 title = "Мій профіль",
@@ -67,6 +70,9 @@ content = @`
                 <div class="profile-section">
                     <h2>Основна інформація</h2>
                     <form action="/profile/update" method="POST" class="profile-form">
+                        @if(_csrf != null)
+                            <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                        @endif
                         <div class="form-group">
                             <label for="username">Ім'я користувача*</label>
                             <input type="text" id="username" name="username" value="${user.getUsername()}" required>
@@ -96,6 +102,9 @@ content = @`
                 <div class="profile-section">
                     <h2>Зміна пароля</h2>
                     <form action="/profile/change-password" method="POST" class="profile-form">
+                        @if(_csrf != null)
+                            <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                        @endif
                         <div class="form-group">
                             <label for="currentPassword">Поточний пароль*</label>
                             <input type="password" id="currentPassword" name="currentPassword" required>
@@ -120,13 +129,17 @@ content = @`
                     <h2>Небезпечна зона</h2>
                     <p>Дії в цій секції мають незворотні наслідки. Будьте обережні!</p>
                     <form action="/profile/delete" method="POST" class="profile-form" onsubmit="return confirm('Ви впевнені, що хочете видалити свій профіль? Ця дія незворотна.');">
+                        @if(_csrf != null)
+                            <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                        @endif
                         <button type="submit" class="btn btn-danger">Видалити профіль</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 
 <style>

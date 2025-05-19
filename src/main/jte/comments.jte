@@ -5,6 +5,8 @@
 
 @param List<Comment> comments
 @param Long post
+@param boolean isAdmin
+@param boolean isLoggedIn
 
 @template.layout(
 title = "${post}",
@@ -36,13 +38,19 @@ content = @`
                             <div class="post-stats">
                                 <span class="reply-count">0 відповідей</span>
                             </div>
+                            @if(isAdmin)
+                                <form method="post" action="/comment/${comment.getId()}/delete" class="delete-form">
+                                    <button type="submit" class="delete-button">Видалити</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 @endfor
             </div>
         @endif
     </div>
-`
+`,
+isLoggedIn = isLoggedIn
 )
 <style>
     .category-posts {

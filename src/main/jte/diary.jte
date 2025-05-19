@@ -1,6 +1,8 @@
 @param com.shevchenko.mentalHealthSupport.models.User currentUser = null
 @param java.util.List<com.shevchenko.mentalHealthSupport.models.Diary> diaryEntries = java.util.Collections.emptyList()
 @param java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+@param org.springframework.security.web.csrf.CsrfToken _csrf
+@param boolean isLoggedIn
 
 @template.layout(
 title = "Особистий щоденник",
@@ -19,6 +21,9 @@ content = @`
             <div class="diary-emotions">
                 <h2>Як ви почуваєтесь сьогодні?</h2>
                 <form action="/diary" method="post" class="emotion-form">
+                    @if(_csrf != null)
+                        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                    @endif
                     <div class="mood-selector">
                         <label>
                             <input type="radio" name="mood" value="great" required>
@@ -503,5 +508,6 @@ content = @`
         }
 
     </script>
-`
+`,
+isLoggedIn = isLoggedIn
 )

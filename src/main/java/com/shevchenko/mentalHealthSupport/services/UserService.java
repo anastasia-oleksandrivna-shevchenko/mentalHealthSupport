@@ -28,6 +28,9 @@ public class UserService {
 
     public User createUser(User user) {
         user.setCreated_at(new Timestamp(System.currentTimeMillis()));
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("ROLE_USER");  // за замовчуванням роль USER
+        }
         return userRepository.save(user);
     }
 
