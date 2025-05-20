@@ -109,13 +109,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> {
-
-                    csrf.disable();
-                    // csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
                 })
 
                 .formLogin(form -> form.disable())
-                .logout(logout -> logout.permitAll())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                 );

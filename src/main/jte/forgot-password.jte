@@ -62,7 +62,8 @@ content = @`
         </div>
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 
 <style>

@@ -3,6 +3,7 @@
 @param java.util.List<Category> categories
 @param boolean isAdmin
 @param boolean isLoggedIn
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 
 @template.layout(
@@ -44,7 +45,8 @@ content = @`
         </div>
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 
 <style>

@@ -1,4 +1,5 @@
 @param boolean isLoggedIn
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 @template.layout(
 title = "Про нас",
@@ -26,7 +27,8 @@ content = @`
         <p>Маєте питання або пропозиції? Напишіть нам на <a href="mailto:support@example.com">support@example.com</a> або скористайтеся формою зворотного зв’язку на сайті.</p>
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 
 <style>

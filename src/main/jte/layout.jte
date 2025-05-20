@@ -3,6 +3,7 @@
 @param boolean showHero = true
 @param gg.jte.Content content
 @param boolean isLoggedIn
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 <!DOCTYPE html>
 <html lang="uk">
@@ -117,7 +118,12 @@
                     <li><a href="/about">Про нас</a></li>
                     <li><a href="/profile">Мій профіль</a></li>
                     @if(isLoggedIn)
-                        <li><a href="/logout">Вийти</a></li>
+                        <form id="logoutForm" action="/logout" method="post" style="display: inline;">
+                            @if(_csrf != null)
+                                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                            @endif
+                            <li><a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Вийти</a></li>
+                        </form>
                     @else
                         <li><a href="/login">Увійти</a></li>
                     @endif

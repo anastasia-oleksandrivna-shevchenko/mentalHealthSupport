@@ -94,7 +94,8 @@ content = @`
         </div>
     @endif
     `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 <style>
     .diary-container {

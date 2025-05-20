@@ -7,6 +7,7 @@
 @param Long post
 @param boolean isAdmin
 @param boolean isLoggedIn
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 @template.layout(
 title = "${post}",
@@ -50,7 +51,8 @@ content = @`
         @endif
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 <style>
     .category-posts {

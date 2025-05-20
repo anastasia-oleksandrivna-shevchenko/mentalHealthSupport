@@ -5,6 +5,7 @@ import com.shevchenko.mentalHealthSupport.models.Post;
 import com.shevchenko.mentalHealthSupport.models.Tag;
 import com.shevchenko.mentalHealthSupport.models.User;
 import com.shevchenko.mentalHealthSupport.repositories.CategoryRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,7 +33,10 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/categories")
-    public String showAllCategories(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showAllCategories(Model model, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken);
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -50,12 +54,13 @@ public class CategoryController {
     }
 
     @GetMapping("/category/new")
-    public String showAddForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showAddForm(Model model, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         return "newCategory";

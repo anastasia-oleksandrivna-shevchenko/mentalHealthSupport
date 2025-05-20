@@ -6,6 +6,7 @@ import com.shevchenko.mentalHealthSupport.models.User;
 import com.shevchenko.mentalHealthSupport.repositories.DiaryRepository;
 import com.shevchenko.mentalHealthSupport.repositories.TagRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,13 +40,16 @@ public class DiaryController {
 
 
     @GetMapping("/diary")
-    public String showDiary(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showDiary(Model model,
+                            @AuthenticationPrincipal UserDetails userDetails,
+                            HttpServletRequest request) {
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
 
         String username = userDetails.getUsername();
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         if (username == null) {

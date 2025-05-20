@@ -3,6 +3,7 @@
 @import org.springframework.security.web.csrf.CsrfToken
 @import java.util.List
 @import java.time.format.DateTimeFormatter
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 <%-- Відображення даних (a) та іменовані параметри (f) --%>
 @param List<Category> categories
@@ -73,7 +74,8 @@ content = @`
         @endif
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 
 <style>

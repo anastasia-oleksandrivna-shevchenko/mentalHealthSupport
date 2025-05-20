@@ -6,6 +6,7 @@ import com.shevchenko.mentalHealthSupport.models.User;
 import com.shevchenko.mentalHealthSupport.repositories.CommentRepository;
 import com.shevchenko.mentalHealthSupport.repositories.PostRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -39,7 +40,10 @@ public class CommentController {
     private PostRepository postRepository;
 
     @GetMapping("/post/{post}")
-    public String commentsByPost(@PathVariable("post") Long post, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String commentsByPost(@PathVariable("post") Long post,
+                                 Model model,
+                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 HttpServletRequest request) {
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -49,7 +53,7 @@ public class CommentController {
         List<Comment> comments = commentRepository.findByPostPostid(post);
         model.addAttribute("comments", comments);
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("_csrf", csrfToken);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -79,7 +83,11 @@ public class CommentController {
                                 @RequestParam String content,
                                 @RequestParam (name = "isAnonymous", required = false) Boolean isAnonymous,
                                 @PathVariable("postid") Long post,
-                                @AuthenticationPrincipal UserDetails userDetails){
+                                @AuthenticationPrincipal UserDetails userDetails,
+                                HttpServletRequest request){
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken);
 
         String username = userDetails.getUsername();
         if (username == null) {

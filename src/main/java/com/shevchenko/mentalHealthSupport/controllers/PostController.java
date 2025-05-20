@@ -8,6 +8,7 @@ import com.shevchenko.mentalHealthSupport.repositories.CategoryRepository;
 import com.shevchenko.mentalHealthSupport.repositories.PostRepository;
 import com.shevchenko.mentalHealthSupport.repositories.TagRepository;
 import com.shevchenko.mentalHealthSupport.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -49,7 +50,8 @@ public class PostController {
     @GetMapping("/category/{categoryid}")
     public String postsByCategory(@PathVariable("categoryid") Long categoryid,
                                   Model model,
-                                  @AuthenticationPrincipal UserDetails userDetails) {
+                                  @AuthenticationPrincipal UserDetails userDetails,
+                                  HttpServletRequest request) {
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -59,7 +61,8 @@ public class PostController {
         List<Post> posts = postRepository.findByCategoryCategoryid(categoryid);
         model.addAttribute("posts", posts);
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -73,15 +76,19 @@ public class PostController {
     @GetMapping("/category/{categoryid}/new")
     public String showAddForm(@PathVariable("categoryid") Long categoryid,
                               Model model,
-                              @AuthenticationPrincipal UserDetails userDetails) {
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              HttpServletRequest request) {
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken);
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
 
         model.addAttribute("category", categoryid);
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
-        model.addAttribute("_csrf", csrfToken);
+        /*CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        model.addAttribute("_csrf", csrfToken);*/
 
         return "newPost";
     }
@@ -140,7 +147,13 @@ public class PostController {
     }
 
     @GetMapping("/my-posts")
-    public String ShowMyPosts(Model model, @AuthenticationPrincipal UserDetails userDetails){
+    public String ShowMyPosts(Model model,
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              HttpServletRequest request){
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken);
+
         String username = userDetails.getUsername();
         if (username == null) {
             return "redirect:/login?redirect=/profile";

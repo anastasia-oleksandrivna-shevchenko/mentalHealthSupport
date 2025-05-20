@@ -3,6 +3,7 @@ package com.shevchenko.mentalHealthSupport.controllers;
 import com.shevchenko.mentalHealthSupport.models.*;
 import com.shevchenko.mentalHealthSupport.repositories.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
@@ -45,7 +47,8 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model, HttpServletRequest request) {
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         return "join-community";
@@ -160,9 +163,10 @@ public class UserController {
 
 
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
+    public String showLoginPage(Model model, HttpServletRequest request) {
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         return "login";
@@ -205,14 +209,15 @@ public class UserController {
 
     // Сторінка профілю
     @GetMapping("/profile")
-    public String showMyProfile(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showMyProfile(Model model, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
 
         boolean isLoggedIn = userDetails != null;
         model.addAttribute("isLoggedIn", isLoggedIn);
 
         String username = userDetails.getUsername();
 
-        CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        //CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "disabled");
         model.addAttribute("_csrf", csrfToken);
 
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -300,6 +305,17 @@ public class UserController {
         }
 
         return "redirect:/login";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // Вийти вручну
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        return "redirect:/login?logout";
     }
 
 

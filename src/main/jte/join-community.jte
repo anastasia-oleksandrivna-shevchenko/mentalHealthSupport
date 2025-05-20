@@ -4,7 +4,7 @@
 
 @param String errorMessage = null
 @param String successMessage = null
-@param CsrfToken _csrf
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 @template.layout(
 title = "Долучитись до спільноти",
@@ -107,7 +107,8 @@ content = @`
         </div>
     </div>
 `,
-isLoggedIn = false
+isLoggedIn = false,
+_csrf = _csrf
 )
 
 <style>

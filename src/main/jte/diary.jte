@@ -4,6 +4,7 @@
 @param org.springframework.security.web.csrf.CsrfToken _csrf
 @param boolean isLoggedIn
 
+
 @template.layout(
 title = "Особистий щоденник",
 description = "Ваш особистий щоденник для відстеження емоційного стану",
@@ -509,5 +510,6 @@ content = @`
 
     </script>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )

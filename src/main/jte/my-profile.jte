@@ -7,8 +7,8 @@
 @param String errorMessage = null
 @param String successMessage = null
 @param DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-@param CsrfToken _csrf
 @param boolean isLoggedIn
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 @template.layout(
 title = "Мій профіль",
@@ -139,7 +139,8 @@ content = @`
         </div>
     </div>
 `,
-isLoggedIn = isLoggedIn
+isLoggedIn = isLoggedIn,
+_csrf = _csrf
 )
 
 <style>
